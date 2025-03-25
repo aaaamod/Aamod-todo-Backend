@@ -5,6 +5,7 @@ const userRouter=require("./routes/user");
 const todoRouter=require("./routes/todos");
 const mongoose=require("mongoose");
 const app = express();
+const PORT=process.env.PORT || 3000
 const cors=require("cors");
 app.use(cors());
 app.use(express.json());
@@ -31,6 +32,6 @@ app.use("/api/v1/todo", todoRouter);
 
 
 connectionDb().then(()=>{
-  app.listen(3000);
+  app.listen(PORT);
   console.log("connected");
 })
