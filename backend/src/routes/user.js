@@ -12,10 +12,35 @@ const {z}=require("zod");
 
 userRouter.use(express.json());
 
+let userData=[];
+function rateLimitCheck(req, res, next){
+ 
+  let i=0;
+for( i=0;i<userData.length;i++){
+  if(userData[i].ip==req.ip){
+   if(userData[i].done>=10) return res.status(429).json({
+    msg:"Too many request"
+  })
+  else {
+    ++userData[i].done; next();return;}
+  }
+}
+userData.push({
+  ip:req.ip,
+  done:0
+})
+ next();
+setTimeout(()=>{
+
+  userData.splice(i,1);
+
+  }, 60000)
+}
 
 
 
-userRouter.post("/signup",async (req,res)=>{
+
+userRouter.post("/signup",rateLimitCheck,async (req,res)=>{
   const bodyLook=z.object({
     name:z.string().regex(/^[A-Za-z\s]+$/, "Only letters are allowed").max(13).min(3),
     email:z.string().email({message:"invalid email"}),
@@ -48,7 +73,7 @@ userRouter.post("/signup",async (req,res)=>{
 
 
 
-userRouter.post("/signin",async (req,res)=>{
+userRouter.post("/signin",rateLimitCheck,async (req,res)=>{
 
   const bodyLook=z.object({
     name:z.string().regex(/^[A-Za-z\s]+$/, "Only letters are allowed").max(13).min(3),
@@ -92,7 +117,7 @@ userRouter.post("/signin",async (req,res)=>{
 
 
 
-userRouter.get("/me",authVerification, async (req,res)=>{
+userRouter.get("/me",rateLimitCheck,authVerification, async (req,res)=>{
 
   const id=req.id;
   try{
