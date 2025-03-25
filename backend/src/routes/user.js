@@ -117,7 +117,7 @@ userRouter.post("/signin",rateLimitCheck,async (req,res)=>{
 
 
 
-userRouter.get("/me",rateLimitCheck,authVerification, async (req,res)=>{
+userRouter.get("/me",authVerification, async (req,res)=>{
 
   const id=req.id;
   try{
