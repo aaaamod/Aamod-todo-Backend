@@ -26,6 +26,7 @@ userData.push({
   ip:req.ip,
   done:0
 })
+ next();
 setTimeout(()=>{
 
   userData.splice(i,1);
