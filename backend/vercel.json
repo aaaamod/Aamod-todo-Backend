@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "src/server.js", "use": "@vercel/node" }
+  ],
+  "ignore": ["node_modules", "build", ".next", ".cache"],
+  "routes": [
+    { "src": "/(.*)", "dest": "src/server.js" }
+  ]
+}
