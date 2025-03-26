@@ -3,7 +3,6 @@ const {todoModel, userModel}=require("../model/todo");
 const authVerification = require("../middlewares/authmiddleware");
 const motivationMiddleware=require("../middlewares/motivationMiddle");
 const { compareSync } = require("bcrypt");
-const { use } = require("./user");
 const todoRouter=express.Router();
 
 todoRouter.use(express.json());
@@ -11,7 +10,7 @@ todoRouter.use(express.json());
 
 let userData=[];
 function rateLimitCheck(req, res, next){
- 
+
   let i=0;
 for( i=0;i<userData.length;i++){
   if(userData[i].ip==req.ip){
@@ -26,7 +25,7 @@ userData.push({
   ip:req.ip,
   done:0
 })
- next();
+next();
 setTimeout(()=>{
 
   userData.splice(i,1);
@@ -40,7 +39,7 @@ setTimeout(()=>{
 
 
 todoRouter.post("/create",rateLimitCheck,authVerification,motivationMiddleware,async (req,res)=>{
-
+console.log("aya");
   const title=req.body.title;
   const isComplete=req.body.isComplete;
  try{
