@@ -11,14 +11,12 @@ const {z}=require("zod");
 
 
 userRouter.use(express.json());
-
 let userData=[];
 function rateLimitCheck(req, res, next){
- 
   let i=0;
 for( i=0;i<userData.length;i++){
   if(userData[i].ip==req.ip){
-   if(userData[i].done>=10) return res.status(429).json({
+   if(userData[i].done>=30) return res.status(429).json({
     msg:"Too many request"
   })
   else {
@@ -27,16 +25,15 @@ for( i=0;i<userData.length;i++){
 }
 userData.push({
   ip:req.ip,
-  done:0
+  done:1
 })
- next();
+next();
 setTimeout(()=>{
 
   userData.splice(i,1);
 
   }, 60000)
 }
-
 
 
 
@@ -117,7 +114,8 @@ userRouter.post("/signin",rateLimitCheck,async (req,res)=>{
 
 
 
-userRouter.get("/me",authVerification, async (req,res)=>{
+userRouter.get("/me",rateLimitCheck ,authVerification, async (req,res)=>{
+
 
   const id=req.id;
   try{
