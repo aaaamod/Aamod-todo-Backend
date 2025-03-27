@@ -165,7 +165,7 @@ if(i.current<responsee.current.todo.length)
       completed:responsee.current.todo[i.current].isComplete,
       todoId:responsee.current.todo[i.current]._id
     })
-    
+    i.current++;
 todoIdList((listt)=>{
   return [...listt , newId]
 });}else return;
